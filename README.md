@@ -1,102 +1,193 @@
 # 🍣 Sushi Restaurant Management API
 
-Một ứng dụng quản lý nhà hàng sushi được xây dựng bằng **Flask + SQLAlchemy + Flask-Migrate**, sử dụng kiến trúc **application factory** và phân lớp **models / services / routes**.  
-Dự án hỗ trợ **SQL Server** (qua `pyodbc`), dễ mở rộng và bảo trì.
+---
+
+## 1. Introduction  
+
+This project is a **Sushi Restaurant Management System** that provides REST APIs for:  
+- Managing Customers  
+- Managing Sushi Items  
+- Managing Orders  
+- Managing Order Details  
+
+The project follows a **layered/clean architecture**:  
+- `domain` → core entities  
+- `application` → business logic / services  
+- `infrastructure` → persistence (database models, repositories)  
+- `presentation` → REST API routes  
+
+It uses **Flask**, **SQLAlchemy**, and optionally **Docker**. API documentation is provided with **Swagger UI (Flasgger)**.
 
 ---
 
-## 🚀 Tính năng
-- Quản lý **khách hàng (Customer)**
-- Quản lý **món sushi (SushiItem)**
-- Quản lý **đơn hàng (Order)**
-- Quản lý **chi tiết đơn hàng (OrderDetail)**
-- API RESTful đầy đủ CRUD
+## 2. Technologies  
+
+- Python (>=3.9)  
+- Flask, Flask-Migrate, SQLAlchemy  
+- SQL Server (via pyodbc) or SQLite  
+- Docker (optional)  
+- Swagger UI (Flasgger)  
 
 ---
 
-## ⚙️ Công nghệ
-- Flask, Flask-Migrate, SQLAlchemy
-- Microsoft SQL Server (qua pyodbc)
+## 3. Project Structure  
 
----
-
-## 📂 Cấu trúc (tóm lược)
-~~~
+```
 sushi-restaurant-management/
 │── wsgi.py
-│── requirements.txt
+│── requirements.txt / pyproject.toml
 │── app/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── extensions.py
-│   │
-│   ├── domain/
-│   │   ├── __init__.py
-│   │   ├── customer.py
-│   │   ├── sushi_item.py
-│   │   ├── order.py
-│   │   └── order_detail.py
-│   │
-│   ├── application/
-│   │   ├── __init__.py
-│   │   ├── customer_service.py
-│   │   ├── sushi_item_service.py
-│   │   ├── order_service.py
-│   │   └── order_detail_service.py
-│   │
-│   ├── infrastructure/
-│   │   ├── __init__.py
-│   │   ├── models/
-│   │   │   ├── __init__.py
-│   │   │   ├── customer_model.py
-│   │   │   ├── sushi_item_model.py
-│   │   │   ├── order_model.py
-│   │   │   └── order_detail_model.py
-│   │   └── repositories/
-│   │       ├── __init__.py
-│   │       ├── customer_repo.py
-│   │       ├── sushi_item_repo.py
-│   │       ├── order_repo.py
-│   │       └── order_detail_repo.py
-│   │
-│   └── presentation/
-│       ├── __init__.py
-│       ├── customer_route.py
-│       ├── sushi_item_route.py
-│       ├── order_route.py
-│       └── order_detail_route.py
-~~~
+│ ├── init.py
+│ ├── config.py
+│ ├── extensions.py
+│ ├── domain/
+│ │ ├── customer.py
+│ │ ├── sushi_item.py
+│ │ ├── order.py
+│ │ └── order_detail.py
+│ ├── application/
+│ │ ├── customer_service.py
+│ │ ├── sushi_item_service.py
+│ │ ├── order_service.py
+│ │ └── order_detail_service.py
+│ ├── infrastructure/
+│ │ ├── models/
+│ │ └── repositories/
+│ └── presentation/
+│ ├── customer_route.py
+│ ├── sushi_item_route.py
+│ ├── order_route.py
+│ └── order_detail_route.py
+│── migrations/ (if using Flask-Migrate)
+```
 
 ---
 
-## 🔧 Cài đặt & chạy
-1. Tạo venv và cài requirements
-2. Config database trong `app/config.py`
-3. Chạy migrate + upgrade
-4. Chạy Flask:
-\`\`\`bash
-$env:FLASK_APP="wsgi.py"
-$env:FLASK_ENV="development"
-flask run
-\`\`\`
+## 4. Installation & Running (Local)
+
+### 4.1. Setup environment
+```
+git clone https://github.com/takahashidan85/sushi-restaurant-management.git
+cd sushi-restaurant-management
+```
+
+#### (Recommended) create virtual environment
+```
+python -m venv .venv
+```
+
+#### Activate virtual environment
+
+CMD:
+```
+.venv\Scripts\activate
+```
+PowerShell:
+```
+.venv\Scripts\Activate.ps1
+```
+If you got error, run PowerShell as Administrator and execute:
+```
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+Press **Y** to process
+
+Linux/macOS:
+```
+source .venv/bin/activate
+```
+
+
+### 4.2. Install dependencies
+
+```
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 4.3. Configure database
+
+Update app/config.py for SQL Server or SQLite.
+If using Flask-Migrate:
+```
+flask db init
+flask db migrate
+flask db upgrade
+```
+
+### 4.4. Run the app
+
+```
+export FLASK_APP=wsgi.py
+export FLASK_ENV=development
+```
+
+```
+flask run --host=0.0.0.0 --port=8000
+```
+
+Or run with Gunicorn:
+```
+pip install gunicorn
+gunicorn --bind 0.0.0.0:8000 wsgi:app
+```
+
+## 5. Run with Docker (optional)
+
+```
+docker build -t sushi-app .
+docker run -p 8000:8000 sushi-app
+```
+---
+
+## 6. API Documentation & Swagger UI
+
+If Swagger (Flasgger) is enabled, access API docs at:
+```
+http://localhost:8000/apidocs
+```
+
+Or OpenAPI JSON at:
+```
+http://localhost:8000/apispec_1.json
+```
+
+Main Endpoints:
+
+**POST /customers/**, **GET /customers/**, **PUT /customers/<id>**, **DELETE /customers/<id>**
+**POST /sushi_items/**, **GET /sushi_items/**, **PUT /sushi_items/<id>**, **DELETE /sushi_items/<id>**
+**POST /orders/**, **GET /orders/**, **PUT /orders/<id>**, **DELETE /orders/<id>**
+**POST /order_details/**, **GET /order_details/**, **PUT /order_details/<id>**, **DELETE /order_details/<id>**
 
 ---
 
-## 📌 API Endpoints (demo)
-- `POST /customers/`, `GET /customers/`, `PUT /customers/<id>`, `DELETE /customers/<id>`
-- `POST /sushi_items/`, `GET /sushi_items/`, `PUT /sushi_items/<id>`, `DELETE /sushi_items/<id>`
-- `POST /orders/`, `GET /orders/`, `DELETE /orders/<id>`
-- `POST /order_details/`, `GET /order_details/`, `PUT /order_details/<id>`, `DELETE /order_details/<id>`
+## 7. Learning Objectives
+
+Apply layered / clean architecture in software development.
+Implement RESTful CRUD APIs with Flask.
+Generate API documentation with Swagger.
+Deploy application using Docker.
 
 ---
 
-## 🧪 Test
-Ví dụ tạo customer:
-\`\`\`bash
-curl -X POST http://127.0.0.1:5000/customers/ -H "Content-Type: application/json" -d '{"name": "Dan", "email": "dan@example.com"}'
-\`\`\`
+## 8. Future Improvements
+
+Add authentication (JWT).
+Build frontend (Web/Mobile).
+Deploy to cloud (Heroku, DigitalOcean, etc.).
+Add logging, unit testing, CI/CD workflows.
 
 ---
 
-## 📜 License
-MIT
+## 9. About the author
+
+- **Name:** Trần Cát Đằng (Takahashi Dan)
+- **Email:** catdangtran1@gmail.com
+- **Discord:** TakahashiDan
+- **Github:** https://github.com/takahashidan85
+
+---
+
+## 10. License
+
+- MIT License
