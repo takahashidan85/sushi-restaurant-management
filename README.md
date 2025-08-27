@@ -101,7 +101,7 @@ sushi-restaurant-management/
 
 ---
 
-## 5. Installation & Running (Local)
+## 5. Installation & Running
 
 ### 5.1. Setup environment
 ```bash
