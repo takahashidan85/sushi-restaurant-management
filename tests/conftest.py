@@ -18,7 +18,7 @@ def app():
     app = create_app(test_config=config)
     with app.app_context():
         # create tables using models' define_models to ensure tables exist
-        from app.infrastructure import define_models as _dm  # not directly available; we'll import via models module
+        from app.infrastructure.models import define_models as _dm  # not directly available; we'll import via models module
         try:
             # try to import and define models
             from app.infrastructure.models import define_models
