@@ -76,6 +76,42 @@ def get_order(order_id):
         return {"error": "not found"}, 404
     return jsonify(o.to_dict())
 
+@order_bp.put("/<int:order_id>")
+def update_order(order_id):
+    """
+    Update an order
+    ---
+    tags:
+      - Orders
+    parameters:
+      - in: path
+        name: order_id
+        type: integer
+        required: true
+        description: ID of the order to update
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            customer_id:
+              type: integer
+              description: New customer ID for the order
+    responses:
+      200:
+        description: Order updated successfully
+        examples:
+          application/json: {"id":1,"customer_id":2,"status":"pending"}
+      404:
+        description: Order not found
+    """
+    data = request.get_json() or {}
+    o = OrderService.update(order_id, data.get("customer_id"))
+    if not o:
+        return {"error": "not found"}, 404
+    return jsonify(o.to_dict())
+
 @order_bp.delete("/<int:order_id>")
 def delete_order(order_id):
     """

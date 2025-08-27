@@ -16,6 +16,16 @@ class OrderRepository:
     @staticmethod
     def get(order_id: int) -> OrderModel | None:
         return OrderModel.query.get(order_id)
+    
+    @staticmethod
+    def update(order_id: int, customer_id: int | None = None) -> OrderModel | None:
+        o = OrderModel.query.get(order_id)
+        if not o:
+            return None
+        if customer_id is not None:
+            o.customer_id = customer_id
+        db.session.commit()
+        return o
 
     @staticmethod
     def delete(order_id: int) -> bool:

@@ -12,6 +12,10 @@ class OrderService:
     @staticmethod
     def get(order_id: int):
         return OrderRepository.get(order_id)
+    
+    @staticmethod
+    def update(order_id, customer_id=None):
+        return OrderRepository.update(order_id, customer_id)    
 
     @staticmethod
     def delete(order_id: int) -> bool:
