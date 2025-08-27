@@ -1,5 +1,22 @@
 # 🍣 Sushi Restaurant Management API
 
+A backend application for managing a sushi restaurant, built with **Flask**, **SQLAlchemy**, **Flasgger (Swagger UI)**, and **Docker**.  
+It supports CRUD operations for Customers, Sushi Items, Orders, and Order Details.
+
+---
+
+## 📑 Table of Contents
+1. [Introduction](#introduction)  
+2. [Technologies](#technologies)  
+3. [ERD + Use Case Diagram](#erd-use-case-diagram)
+4. [Project Structure](#project-structure)
+5. [Installation & Running](#installation-and-running)
+6. [API Documentation & Swagger UI](#api-documentation-swaggerui)
+7. [Unit Testing](#unit-testing)  
+8. [Learning Objectives](#learning-objectives)  
+9. [Future Improvements](#future-improvements)
+10. [About the authour](#author)
+11. [License](#license)
 ---
 
 ## 1. Introduction  
@@ -18,6 +35,8 @@ The project follows a **layered/clean architecture**:
 
 It uses **Flask**, **SQLAlchemy**, and optionally **Docker**. API documentation is provided with **Swagger UI (Flasgger)**.
 
+For details, see [docs/architecture.md](docs/architecture.md).
+
 ---
 
 ## 2. Technologies  
@@ -30,7 +49,19 @@ It uses **Flask**, **SQLAlchemy**, and optionally **Docker**. API documentation 
 
 ---
 
-## 3. Project Structure  
+## 3. ERD + Use Case Diagram
+
+### Entity Relationship Diagram (ERD)
+
+![ERD](docs/ERD_SushiRestaurant.png)
+
+### Use Case Diagram
+
+![Use Case Diagram](docs/UseCase_SushiRestaurant.png)
+
+---
+
+## 4. Project Structure  
 
 ```markdown
 sushi-restaurant-management/
@@ -69,9 +100,9 @@ sushi-restaurant-management/
 
 ---
 
-## 4. Installation & Running (Local)
+## 5. Installation & Running (Local)
 
-### 4.1. Setup environment
+### 5.1. Setup environment
 ```bash
 git clone https://github.com/takahashidan85/sushi-restaurant-management.git
 cd sushi-restaurant-management
@@ -104,14 +135,14 @@ source .venv/bin/activate
 ```
 
 
-### 4.2. Install dependencies
+### 5.2. Install dependencies
 
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4.3. Database Migration
+### 5.3. Database Migration
 
 This project uses Flask-Migrate.
 The `migrations/` folder is already included in the repo. You only need to run:
@@ -125,7 +156,7 @@ flask db migrate -m "describe your change"
 flask db upgrade
 ```
 
-### 4.4. Run the app
+### 5.4. Run the app
 
 ```bash
 export FLASK_APP=wsgi.py
@@ -142,7 +173,7 @@ pip install gunicorn
 gunicorn --bind 0.0.0.0:8000 wsgi:app
 ```
 
-### 4.5. Run with Docker (optional)
+### 5.5. Run with Docker (optional)
 
 ```bash
 docker build -t sushi-app .
@@ -150,7 +181,7 @@ docker run -p 8000:8000 sushi-app
 ```
 ---
 
-## 5. API Documentation & Swagger UI
+## 6. API Documentation & Swagger UI
 
 If Swagger (Flasgger) is enabled, access API docs at:
 ```bash
@@ -171,7 +202,7 @@ Main Endpoints:
 
 ---
 
-## 6. Unit Testing
+## 7. Unit Testing
 
 Unit tests are written with pytest. The tests use an in-memory SQLite database so they are safe and isolated.
 
@@ -188,7 +219,7 @@ Tests cover CRUD functionality for:
 
 ---
 
-## 7. Learning Objectives
+## 8. Learning Objectives
 
 - Apply layered / clean architecture in software development.
 - Implement RESTful CRUD APIs with Flask.
@@ -199,16 +230,16 @@ Tests cover CRUD functionality for:
 
 ---
 
-## 8. Future Improvements
+## 9. Future Improvements
 
 - Add authentication (JWT).
 - Build frontend (Web/Mobile).
 - Deploy to cloud (Heroku, DigitalOcean, etc.).
-- Add logging, unit testing, CI/CD workflows.
+- Add logging, CI/CD workflows.
 
 ---
 
-## 9. About the author
+## 10. About the author
 
 - **Name:** Trần Cát Đằng (Takahashi Dan)
 - **Email:** catdangtran1@gmail.com
@@ -217,6 +248,6 @@ Tests cover CRUD functionality for:
 
 ---
 
-## 10. License
+## 11. License
 
 - MIT License
