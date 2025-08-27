@@ -1,5 +1,5 @@
 from flask import Flask
-from flassgger import Swagger
+from flasgger import Swagger
 from .customer_route import customer_bp
 from .sushi_item_route import sushi_item_bp
 from .order_route import order_bp
@@ -13,11 +13,7 @@ def register_blueprints(app):
 
 def create_app():
     app = Flask(__name__)
-
-    # Kích hoạt Swagger
     Swagger(app)
-
-    # Giữ nguyên blueprint cũ
     register_blueprints(app)
 
     return app
