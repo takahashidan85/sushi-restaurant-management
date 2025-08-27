@@ -1,41 +1,101 @@
 from flask import Blueprint, request, jsonify
-from app.application.order_detail_service import OrderDetailService
+from app.application.order_service import OrderService
 
-order_detail_bp = Blueprint("order_details", __name__)
+order_bp = Blueprint("orders", __name__)
 
-@order_detail_bp.post("/")
-def create_order_detail():
+@order_bp.post("/")
+def create_order():
+    """
+    Create a new order
+    ---
+    tags:
+      - Orders
+    parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          required: [customer_id]
+          properties:
+            customer_id:
+              type: integer
+    responses:
+      201:
+        description: Order created successfully
+        examples:
+          application/json: {"id":1,"customer_id":1,"status":"pending"}
+      400:
+        description: customer_id required
+    """
     data = request.get_json() or {}
-    order_id = data.get("order_id")
-    sushi_item_id = data.get("sushi_item_id")
-    quantity = data.get("quantity", 1)
-    if not order_id or not sushi_item_id:
-        return {"error": "order_id and sushi_item_id required"}, 400
-    od = OrderDetailService.create(order_id, sushi_item_id, quantity)
-    return jsonify(od.to_dict()), 201
+    customer_id = data.get("customer_id")
+    if not customer_id:
+        return {"error": "customer_id required"}, 400
+    o = OrderService.create(customer_id)
+    return jsonify(o.to_dict()), 201
 
-@order_detail_bp.get("/")
-def list_order_details():
-    details = OrderDetailService.list_all()
-    return jsonify([d.to_dict() for d in details])
+@order_bp.get("/")
+def list_orders():
+    """
+    Get all orders
+    ---
+    tags:
+      - Orders
+    responses:
+      200:
+        description: List of orders
+        examples:
+          application/json: [{"id":1,"customer_id":1,"status":"pending"}]
+    """
+    orders = OrderService.list_all()
+    return jsonify([o.to_dict() for o in orders])
 
-@order_detail_bp.get("/<int:od_id>")
-def get_order_detail(od_id):
-    od = OrderDetailService.get(od_id)
-    if not od:
+@order_bp.get("/<int:order_id>")
+def get_order(order_id):
+    """
+    Get order by ID
+    ---
+    tags:
+      - Orders
+    parameters:
+      - in: path
+        name: order_id
+        type: integer
+        required: true
+    responses:
+      200:
+        description: Order found
+        examples:
+          application/json: {"id":1,"customer_id":1,"status":"pending"}
+      404:
+        description: Order not found
+    """
+    o = OrderService.get(order_id)
+    if not o:
         return {"error": "not found"}, 404
-    return jsonify(od.to_dict())
+    return jsonify(o.to_dict())
 
-@order_detail_bp.put("/<int:od_id>")
-def update_order_detail(od_id):
-    data = request.get_json() or {}
-    od = OrderDetailService.update(od_id, data.get("quantity"))
-    if not od:
-        return {"error": "not found"}, 404
-    return jsonify(od.to_dict())
-
-@order_detail_bp.delete("/<int:od_id>")
-def delete_order_detail(od_id):
-    if not OrderDetailService.delete(od_id):
+@order_bp.delete("/<int:order_id>")
+def delete_order(order_id):
+    """
+    Delete an order
+    ---
+    tags:
+      - Orders
+    parameters:
+      - in: path
+        name: order_id
+        type: integer
+        required: true
+    responses:
+      200:
+        description: Order deleted successfully
+        examples:
+          application/json: {"message": "deleted"}
+      404:
+        description: Order not found
+    """
+    if not OrderService.delete(order_id):
         return {"error": "not found"}, 404
     return {"message": "deleted"}
