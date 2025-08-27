@@ -6,17 +6,18 @@ It supports CRUD operations for Customers, Sushi Items, Orders, and Order Detail
 ---
 
 ## Table of Contents
-1. [Introduction](#introduction)  
-2. [Technologies](#technologies)  
-3. [ERD + Use Case Diagram](#erd-use-case-diagram)
-4. [Project Structure](#project-structure)
-5. [Installation & Running](#installation-and-running)
-6. [API Documentation & Swagger UI](#api-documentation-swaggerui)
-7. [Unit Testing](#unit-testing)  
-8. [Learning Objectives](#learning-objectives)  
-9. [Future Improvements](#future-improvements)
-10. [About the authour](#author)
-11. [License](#license)
+1. [Introduction](#1-introduction)  
+2. [Technologies](#2-technologies)  
+3. [ERD + Use Case Diagram](#3-erd--use-case-diagram)  
+4. [Project Structure](#4-project-structure)  
+5. [Installation & Running](#5-installation--running)  
+6. [API Documentation & Swagger UI](#6-api-documentation--swagger-ui)  
+7. [Unit Testing](#7-unit-testing)  
+8. [Learning Objectives](#8-learning-objectives)  
+9. [Future Improvements](#9-future-improvements)  
+10. [About the Author](#10-about-the-author)  
+11. [License](#11-license)
+
 ---
 
 ## 1. Introduction  
