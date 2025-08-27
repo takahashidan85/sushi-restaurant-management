@@ -1,27 +1,47 @@
 from flask import Blueprint, request, jsonify
-from app.application.customer_service import MenuService
+from app.application.sushi_item_service import SushiItemService
 
-bp = Blueprint('menu', __name__)
+sushi_item_bp = Blueprint("sushi_items", __name__)
 
-@bp.post('/')
-def create_menu():
+@sushi_item_bp.post("/")
+def create_sushi_item():
     data = request.get_json() or {}
-    name = data.get('name')
-    price = data.get('price')
-    category = data.get('category')
+    name = data.get("name")
+    price = data.get("price")
+    category = data.get("category")
     if not name or price is None:
-        return {'error': 'name and price required'}, 400
-    m = MenuService.create(name, float(price), category)
-    return jsonify(m.to_dict()), 201
+        return {"error": "name and price required"}, 400
+    item = SushiItemService.create(name, price, category)
+    return jsonify(item.to_dict()), 201
 
-@bp.get('/')
-def list_menu():
-    items = MenuService.list_all()
+@sushi_item_bp.get("/")
+def list_sushi_items():
+    items = SushiItemService.list_all()
     return jsonify([i.to_dict() for i in items])
 
-@bp.get('/<int:item_id>')
-def get_menu(item_id):
-    m = MenuService.get(item_id)
-    if not m:
-        return {'error': 'not found'}, 404
-    return jsonify(m.to_dict())
+@sushi_item_bp.get("/<int:item_id>")
+def get_sushi_item(item_id):
+    item = SushiItemService.get(item_id)
+    if not item:
+        return {"error": "not found"}, 404
+    return jsonify(item.to_dict())
+
+@sushi_item_bp.put("/<int:item_id>")
+def update_sushi_item(item_id):
+    data = request.get_json() or {}
+    item = SushiItemService.update(
+        item_id,
+        name=data.get("name"),
+        price=data.get("price"),
+        category=data.get("category"),
+    )
+    if not item:
+        return {"error": "not found"}, 404
+    return jsonify(item.to_dict())
+
+@sushi_item_bp.delete("/<int:item_id>")
+def delete_sushi_item(item_id):
+    success = SushiItemService.delete(item_id)
+    if not success:
+        return {"error": "not found"}, 404
+    return {"message": "deleted"}
