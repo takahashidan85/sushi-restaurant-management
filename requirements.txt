@@ -1,4 +1,8 @@
-Flask>=2.2
-Flask-SQLAlchemy>=3.0
-python-dotenv>=1.0
-pytest>=7.0
+Flask==3.0.2
+SQLAlchemy==2.0.29
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.5
+alembic==1.13.1
+pyodbc==5.1.0
+bcrypt==4.1.2
+python-dotenv==1.0.1
