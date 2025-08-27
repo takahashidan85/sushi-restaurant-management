@@ -1,0 +1,32 @@
+@startuml UseCase_SushiRestaurant
+
+left to right direction
+actor "Customer" as C
+actor "Admin" as A
+
+rectangle "Sushi Restaurant Management System" {
+  
+  (Register) as UC1
+  (View Sushi Menu) as UC2
+  (Place Order) as UC3
+  (View Order Details) as UC4
+
+  (Manage Customers) as UC5
+  (Manage Sushi Items) as UC6
+  (Manage Orders) as UC7
+  (Manage Order Details) as UC8
+}
+
+' Customer interactions
+C --> UC1
+C --> UC2
+C --> UC3
+C --> UC4
+
+' Admin interactions
+A --> UC5
+A --> UC6
+A --> UC7
+A --> UC8
+
+@enduml
