@@ -1,0 +1,33 @@
+@startuml ERD_SushiRestaurant
+
+entity "Customer" as customer {
+    *id : int <<PK>>
+    --
+    name : string
+    email : string
+}
+
+entity "Order" as order {
+    *id : int <<PK>>
+    customer_id : int <<FK>>
+    status : string
+}
+
+entity "SushiItem" as sushi_item {
+    *id : int <<PK>>
+    name : string
+    price : float
+}
+
+entity "OrderDetail" as order_detail {
+    *id : int <<PK>>
+    order_id : int <<FK>>
+    sushi_item_id : int <<FK>>
+    quantity : int
+}
+
+customer ||--o{ order : places
+order ||--o{ order_detail : contains
+sushi_item ||--o{ order_detail : includes
+
+@enduml
