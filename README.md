@@ -21,30 +21,51 @@ Dự án hỗ trợ **SQL Server** (qua `pyodbc`), dễ mở rộng và bảo tr
 ---
 
 ## 📂 Cấu trúc (tóm lược)
-\`\`\`
-sushi-restaurant-management-full/
+~~~
+sushi-restaurant-management/
 │── wsgi.py
 │── requirements.txt
 │── app/
 │   ├── __init__.py
 │   ├── config.py
 │   ├── extensions.py
-│   ├── models/
+│   │
+│   ├── domain/
+│   │   ├── __init__.py
 │   │   ├── customer.py
 │   │   ├── sushi_item.py
 │   │   ├── order.py
 │   │   └── order_detail.py
+│   │
 │   ├── application/
+│   │   ├── __init__.py
 │   │   ├── customer_service.py
 │   │   ├── sushi_item_service.py
 │   │   ├── order_service.py
 │   │   └── order_detail_service.py
+│   │
+│   ├── infrastructure/
+│   │   ├── __init__.py
+│   │   ├── models/
+│   │   │   ├── __init__.py
+│   │   │   ├── customer_model.py
+│   │   │   ├── sushi_item_model.py
+│   │   │   ├── order_model.py
+│   │   │   └── order_detail_model.py
+│   │   └── repositories/
+│   │       ├── __init__.py
+│   │       ├── customer_repo.py
+│   │       ├── sushi_item_repo.py
+│   │       ├── order_repo.py
+│   │       └── order_detail_repo.py
+│   │
 │   └── presentation/
+│       ├── __init__.py
 │       ├── customer_route.py
 │       ├── sushi_item_route.py
 │       ├── order_route.py
 │       └── order_detail_route.py
-\`\`\`
+~~~
 
 ---
 
