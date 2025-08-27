@@ -1,11 +1,11 @@
-# 🍣 Sushi Restaurant Management API
+# Sushi Restaurant Management API
 
 A backend application for managing a sushi restaurant, built with **Flask**, **SQLAlchemy**, **Flasgger (Swagger UI)**, and **Docker**.  
 It supports CRUD operations for Customers, Sushi Items, Orders, and Order Details.
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 1. [Introduction](#introduction)  
 2. [Technologies](#technologies)  
 3. [ERD + Use Case Diagram](#erd-use-case-diagram)
