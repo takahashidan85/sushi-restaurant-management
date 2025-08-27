@@ -1,6 +1,6 @@
 from app.extensions import db
 
-class OrderDetail(db.Model):
+class OrderDetailModel(db.Model):
     __tablename__ = "order_details"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -8,8 +8,8 @@ class OrderDetail(db.Model):
     sushi_item_id = db.Column(db.Integer, db.ForeignKey("sushi_items.id"), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
-    order = db.relationship("Order", back_populates="order_details")
-    sushi_item = db.relationship("SushiItem", back_populates="order_details")
+    order = db.relationship("OrderModel", back_populates="order_details")
+    sushi_item = db.relationship("SushiItemModel", back_populates="order_details")
 
     def to_dict(self):
         return {
