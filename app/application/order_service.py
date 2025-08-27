@@ -1,31 +1,18 @@
-from app.extensions import db
-from app.infrastructure.models import define_models
-
-def init():
-    return define_models(db)
+from app.infrastructure.repositories.order_repo import OrderRepository
 
 class OrderService:
     @staticmethod
-    def create_order(table_number: int = None):
-        models = init()
-        Order = models['Order']
-        o = Order(table_number=table_number)
-        db.session.add(o)
-        db.session.commit()
-        return o
+    def create(customer_id: int):
+        return OrderRepository.add(customer_id)
 
     @staticmethod
-    def add_item(order_id: int, menu_item_id: int, quantity: int = 1):
-        models = init()
-        Order = models['Order']
-        OrderItem = models['OrderItem']
-        o = Order.query.get(order_id)
-        if not o:
-            return None
-        oi = OrderItem(order_id=order_id, menu_item_id=menu_item_id, quantity=quantity)
-        db.session.add(oi)
-        db.session.commit()
-        # recalc
-        o.recalc_total(db)
-        db.session.commit()
-        return o
+    def list_all():
+        return OrderRepository.list_all()
+
+    @staticmethod
+    def get(order_id: int):
+        return OrderRepository.get(order_id)
+
+    @staticmethod
+    def delete(order_id: int) -> bool:
+        return OrderRepository.delete(order_id)
