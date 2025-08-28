@@ -68,7 +68,7 @@ See the [Entity Relationship Diagram (ERD)](ERD_SushiRestaurant.png) for table r
 Main entities:
 
 - **Customer:** id, name, email
-- **SushiItem:** id, name, price
+- **SushiItem:** id, name, price, description
 - **Order:** id, customer_id, status
 - **OrderDetail:** id, order_id, sushi_item_id, quantity
 
