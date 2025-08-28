@@ -93,10 +93,10 @@ sushi-restaurant-management/
 │── migrations/ (if using Flask-Migrate)
 │── tests/
 │ ├── conftest.py
-│ ├── test_customer.py
-│ ├── test_sushi_item.py
-│ ├── test_order.py
-│ └── test_order_detail.py
+│ ├── customer_test.py
+│ ├── sushi_item_test.py
+│ ├── order_test.py
+│ └── order_detail_test.py
 ```
 
 ---
