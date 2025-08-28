@@ -2,11 +2,11 @@
 
 left to right direction
 actor "Customer" as C
-actor "Admin" as A
+actor "Staff" as S
 
 rectangle "Sushi Restaurant Management System" {
-  
-  (Register) as UC1
+
+  (Register Account) as UC1
   (View Sushi Menu) as UC2
   (Place Order) as UC3
   (View Order Details) as UC4
@@ -17,16 +17,21 @@ rectangle "Sushi Restaurant Management System" {
   (Manage Order Details) as UC8
 }
 
-' Customer interactions
 C --> UC1
 C --> UC2
 C --> UC3
 C --> UC4
 
-' Admin interactions
-A --> UC5
-A --> UC6
-A --> UC7
-A --> UC8
+S --> UC5
+S --> UC6
+S --> UC7
+S --> UC8
+
+note right of UC6
+  Staff can:
+  - Add Sushi Item (name, price, category, description)
+  - Update Sushi Item
+  - Delete Sushi Item
+end note
 
 @enduml
