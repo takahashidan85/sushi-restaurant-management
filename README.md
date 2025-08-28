@@ -176,6 +176,7 @@ gunicorn --bind 0.0.0.0:8000 wsgi:app
 
 ### 5.5. Run with Docker (optional)
 
+Make sure Docker has been installed on your computer.
 ```bash
 docker build -t sushi-app .
 docker run -p 8000:8000 sushi-app
