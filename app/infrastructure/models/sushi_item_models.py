@@ -7,8 +7,9 @@ class SushiItemModel(db.Model):
     name = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Float, nullable=False)
     category = db.Column(db.String(50), nullable=True)
+    description = db.Column(db.String(255), nullable=True)
 
     order_details = db.relationship("OrderDetailModel", back_populates="sushi_item")
 
     def to_dict(self):
-        return {"id": self.id, "name": self.name, "price": self.price, "category": self.category}
+        return {"id": self.id, "name": self.name, "price": self.price, "category": self.category, "description": self.description}

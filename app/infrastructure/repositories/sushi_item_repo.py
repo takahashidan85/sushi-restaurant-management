@@ -3,8 +3,8 @@ from app.infrastructure.models.sushi_item_models import SushiItemModel
 
 class SushiItemRepository:
     @staticmethod
-    def add(name: str, price: float, category: str | None) -> SushiItemModel:
-        s = SushiItemModel(name=name, price=price, category=category)
+    def add(name: str, price: float, category: str | None = None, description: str | None = None) -> SushiItemModel:
+        s = SushiItemModel(name=name, price=price, category=category, description=description)
         db.session.add(s)
         db.session.commit()
         return s
@@ -18,7 +18,7 @@ class SushiItemRepository:
         return SushiItemModel.query.get(item_id)
 
     @staticmethod
-    def update(item_id: int, name=None, price=None, category=None) -> SushiItemModel | None:
+    def update(item_id: int, name=None, price=None, category=None, description=None) -> SushiItemModel | None:
         s = SushiItemModel.query.get(item_id)
         if not s:
             return None
@@ -28,6 +28,8 @@ class SushiItemRepository:
             s.price = price
         if category is not None:
             s.category = category
+        if description is not None:
+            s.description = description
         db.session.commit()
         return s
 

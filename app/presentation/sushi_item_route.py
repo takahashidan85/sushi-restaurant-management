@@ -24,11 +24,13 @@ def create_sushi_item():
               type: number
             category:
               type: string
+            description:
+              type: string
     responses:
       201:
         description: Sushi item created
         examples:
-          application/json: {"id":1,"name":"Salmon Sushi","price":2.5,"category":"Nigiri"}
+          application/json: {"id":1,"name":"Salmon Sushi","price":2.5,"category":"Nigiri","description":"Fresh salmon over rice"}
       400:
         description: Missing name or price
     """
@@ -36,9 +38,10 @@ def create_sushi_item():
     name = data.get("name")
     price = data.get("price")
     category = data.get("category")
+    description = data.get("description")
     if not name or price is None:
         return {"error": "name and price required"}, 400
-    item = SushiItemService.create(name, price, category)
+    item = SushiItemService.create(name, price, category, description)
     return jsonify(item.to_dict()), 201
 
 @sushi_item_bp.get("/")
@@ -52,7 +55,7 @@ def list_sushi_items():
       200:
         description: List of sushi items
         examples:
-          application/json: [{"id":1,"name":"Salmon Sushi","price":2.5,"category":"Nigiri"}]
+          application/json: [{"id":1,"name":"Salmon Sushi","price":2.5,"category":"Nigiri","description":"Fresh salmon over rice"}]
     """
     items = SushiItemService.list_all()
     return jsonify([i.to_dict() for i in items])
@@ -73,7 +76,7 @@ def get_sushi_item(item_id):
       200:
         description: Sushi item found
         examples:
-          application/json: {"id":1,"name":"Salmon Sushi","price":2.5,"category":"Nigiri"}
+          application/json: {"id":1,"name":"Salmon Sushi","price":2.5,"category":"Nigiri","description":"Fresh salmon over rice"}
       404:
         description: Item not found
     """
@@ -105,11 +108,13 @@ def update_sushi_item(item_id):
               type: number
             category:
               type: string
+            description:
+              type: string
     responses:
       200:
         description: Sushi item updated
         examples:
-          application/json: {"id":1,"name":"Updated Sushi","price":3.0,"category":"Roll"}
+          application/json: {"id":1,"name":"Updated Sushi","price":3.0,"category":"Roll","description":"Cucumber and avocado roll"}
       404:
         description: Item not found
     """
@@ -119,6 +124,7 @@ def update_sushi_item(item_id):
         name=data.get("name"),
         price=data.get("price"),
         category=data.get("category"),
+        description=data.get("description"),
     )
     if not item:
         return {"error": "not found"}, 404
