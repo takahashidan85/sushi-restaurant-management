@@ -76,6 +76,35 @@ def get_order(order_id):
         return {"error": "not found"}, 404
     return jsonify(o.to_dict())
 
+@order_bp.get("/<int:order_id>/details")
+def get_order_details(order_id):
+    """
+    Get all order details for a specific order
+    ---
+    tags:
+      - Orders
+    parameters:
+      - in: path
+        name: order_id
+        type: integer
+        required: true
+        description: ID of the order to retrieve details for
+    responses:
+      200:
+        description: List of order details for the order
+        examples:
+          application/json: 
+            - {"id":1,"order_id":1,"sushi_item_id":2,"quantity":3}
+            - {"id":2,"order_id":1,"sushi_item_id":5,"quantity":1}
+      404:
+        description: Order not found
+    """
+    from app.application.order_detail_service import OrderDetailService
+    details = OrderDetailService.list_by_order(order_id)
+    if details is None:
+        return {"error": "order not found"}, 404
+    return jsonify([d.to_dict() for d in details])
+
 @order_bp.put("/<int:order_id>")
 def update_order(order_id):
     """

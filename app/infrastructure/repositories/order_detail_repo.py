@@ -16,6 +16,10 @@ class OrderDetailRepository:
     @staticmethod
     def get(od_id: int) -> OrderDetailModel | None:
         return OrderDetailModel.query.get(od_id)
+    
+    @staticmethod
+    def list_by_order(od_id: int) -> list[OrderDetailModel] | None:
+        return OrderDetailModel.query.filter_by(order_id=od_id).all()
 
     @staticmethod
     def update(od_id: int, quantity: int | None) -> OrderDetailModel | None:

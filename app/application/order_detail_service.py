@@ -2,8 +2,8 @@ from app.infrastructure.repositories.order_detail_repo import OrderDetailReposit
 
 class OrderDetailService:
     @staticmethod
-    def create(order_id: int, sushi_item_id: int, quantity: int = 1):
-        return OrderDetailRepository.add(order_id, sushi_item_id, quantity)
+    def create(od_id: int, sushi_item_id: int, quantity: int = 1):
+        return OrderDetailRepository.add(od_id, sushi_item_id, quantity)
 
     @staticmethod
     def list_all():
@@ -12,6 +12,10 @@ class OrderDetailService:
     @staticmethod
     def get(od_id: int):
         return OrderDetailRepository.get(od_id)
+    
+    @staticmethod
+    def list_by_order(od_id: int):
+        return OrderDetailRepository.list_by_order(od_id)
 
     @staticmethod
     def update(od_id: int, quantity: int | None):
