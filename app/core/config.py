@@ -5,13 +5,18 @@ class Config:
     DEBUG = True
     TESTING = False
     ENV = "base"
-    SECRET_KEY = os.environ.get("SECRET_KEY" or "supersecretkey")
+
+    SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
 
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
         "sqlite:///sushi.db"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    APP_NAME = os.getenv("APP_NAME", "Sushi Restaurant API")
+    APP_PORT = int(os.getenv("APP_PORT", 5000))
+    LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -21,9 +26,11 @@ class DevelopmentConfig(Config):
         "sqlite:///sushi_dev.db"
     )
 
+
 class ProductionConfig(Config):
     DEBUG = False
     ENV = "production"
+
 
 class TestingConfig(Config):
     TESTING = True
