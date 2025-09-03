@@ -1,23 +1,20 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y \
+    build-essential libpq-dev gcc curl && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    unixodbc \
-    unixodbc-dev \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
 COPY requirements.txt .
-
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt \
-    && pip install gunicorn
+RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
 COPY . .
 
-EXPOSE 8000
+ENV PYTHONUNBUFFERED=1
+ENV FLASK_APP=app_factory.py
+ENV FLASK_ENV=production
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "wsgi:app"]
+EXPOSE 5000
+
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app_factory:create_app()"]
