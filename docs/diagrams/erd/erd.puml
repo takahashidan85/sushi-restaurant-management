@@ -1,0 +1,34 @@
+@startuml
+entity "Customer" as customers {
+  *id : int
+  name : varchar(100)
+  email : varchar(120) [unique]
+}
+
+entity "Order" as orders {
+  *id : int
+  customer_id : int
+  order_type : varchar(50) = "dine-in"
+  status : varchar(50) = "pending"
+}
+
+entity "OrderDetail" as order_details {
+  *id : int
+  order_id : int
+  sushi_item_id : int
+  quantity : int = 1
+  total_price : float = 0.0
+}
+
+entity "SushiItem" as sushi_items {
+  *id : int
+  name : varchar(100)
+  price : float
+  category : varchar(50)
+  description : varchar(255)
+}
+
+customers ||--o{ orders
+orders ||--o{ order_details
+sushi_items ||--o{ order_details
+@enduml

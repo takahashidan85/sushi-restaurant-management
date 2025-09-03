@@ -1,0 +1,18 @@
+@startuml
+start
+:Admin selects Sushi Item function;
+if (Create Sushi Item?) then (yes)
+  :Enter item information;
+  :Save to Database;
+elseif (View Sushi Item?) then (yes)
+  :Query Database;
+  :Display sushi item;
+elseif (Update Sushi Item?) then (yes)
+  :Enter updated information;
+  :Update Database;
+elseif (Delete Sushi Item?) then (yes)
+  :Select item to delete;
+  :Delete from Database;
+endif
+stop
+@enduml

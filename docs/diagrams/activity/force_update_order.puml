@@ -1,0 +1,8 @@
+@startuml
+start
+:Admin selects Force Update Order;
+:Select order to override;
+:Enter new status (ignore constraints);
+:Directly update Database;
+stop
+@enduml

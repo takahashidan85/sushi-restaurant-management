@@ -1,0 +1,13 @@
+@startuml
+actor Admin as A
+boundary API as B
+control Service as S
+database DB as D
+
+A -> B: Delete Sushi Item request
+B -> S: Validate + call Delete Sushi Item
+S -> D: DB operation for Delete Sushi Item
+D --> S: Result
+S --> B: Response
+B --> A: JSON response
+@enduml

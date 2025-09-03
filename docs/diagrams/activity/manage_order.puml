@@ -1,0 +1,21 @@
+@startuml
+start
+:User selects Order function;
+if (Create Order?) then (yes)
+  :Enter order information;
+  :Save to Database;
+elseif (View Order?) then (yes)
+  :Query Database;
+  :Display order information;
+elseif (Update Order?) then (yes)
+  :Enter updated information;
+  :Update Database;
+elseif (Delete Order?) then (yes)
+  :Select order to delete;
+  :Delete from Database;
+elseif (Patch Order Status?) then (yes)
+  :Choose new status;
+  :Update status in Database;
+endif
+stop
+@enduml

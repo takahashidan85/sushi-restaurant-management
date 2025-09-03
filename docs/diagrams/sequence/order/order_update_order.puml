@@ -1,0 +1,13 @@
+@startuml
+actor User as A
+boundary API as B
+control Service as S
+database DB as D
+
+A -> B: Update Order request
+B -> S: Validate + call Update Order
+S -> D: DB operation for Update Order
+D --> S: Result
+S --> B: Response
+B --> A: JSON response
+@enduml

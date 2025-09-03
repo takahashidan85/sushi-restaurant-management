@@ -1,0 +1,13 @@
+@startuml
+actor User as A
+boundary API as B
+control Service as S
+database DB as D
+
+A -> B: Patch Order request
+B -> S: Validate + call Patch Order
+S -> D: DB operation for Patch Order
+D --> S: Result
+S --> B: Response
+B --> A: JSON response
+@enduml

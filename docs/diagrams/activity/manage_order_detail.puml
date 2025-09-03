@@ -1,0 +1,18 @@
+@startuml
+start
+:User selects Order Detail function;
+if (Create Order Detail?) then (yes)
+  :Enter detail information;
+  :Save to Database;
+elseif (View Order Detail?) then (yes)
+  :Query Database;
+  :Display order detail;
+elseif (Update Order Detail?) then (yes)
+  :Enter updated information;
+  :Update Database;
+elseif (Delete Order Detail?) then (yes)
+  :Select order detail to delete;
+  :Delete from Database;
+endif
+stop
+@enduml

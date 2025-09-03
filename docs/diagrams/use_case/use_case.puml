@@ -1,0 +1,34 @@
+@startuml
+actor User
+actor Admin
+
+package "Customer Management" {
+  User --> (Create Customer)
+  User --> (View Customer)
+  User --> (Update Customer)
+  User --> (Delete Customer)
+}
+
+package "Order Management" {
+  User --> (Create Order)
+  User --> (View Order)
+  User --> (Update Order)
+  User --> (Delete Order)
+  User --> (Patch Order Status)
+  Admin --> (Force Update Order)
+}
+
+package "Order Detail Management" {
+  User --> (Create Order Detail)
+  User --> (View Order Detail)
+  User --> (Update Order Detail)
+  User --> (Delete Order Detail)
+}
+
+package "Sushi Item Management" {
+  Admin --> (Create Sushi Item)
+  Admin --> (View Sushi Item)
+  Admin --> (Update Sushi Item)
+  Admin --> (Delete Sushi Item)
+}
+@enduml

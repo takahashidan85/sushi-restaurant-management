@@ -1,0 +1,13 @@
+@startuml
+actor User as A
+boundary API as B
+control Service as S
+database DB as D
+
+A -> B: Create Order Detail request
+B -> S: Validate + call Create Order Detail
+S -> D: DB operation for Create Order Detail
+D --> S: Result
+S --> B: Response
+B --> A: JSON response
+@enduml

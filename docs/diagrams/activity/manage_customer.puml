@@ -1,0 +1,18 @@
+@startuml
+start
+:User selects Customer function;
+if (Create Customer?) then (yes)
+  :Enter customer information;
+  :Save to Database;
+elseif (View Customer?) then (yes)
+  :Query Database;
+  :Display customer information;
+elseif (Update Customer?) then (yes)
+  :Enter updated information;
+  :Update Database;
+elseif (Delete Customer?) then (yes)
+  :Select customer to delete;
+  :Delete from Database;
+endif
+stop
+@enduml
