@@ -8,7 +8,7 @@ It supports CRUD operations for Customers, Sushi Items, Orders, and Order Detail
 ## Table of Contents
 1. [Introduction](#1-introduction)  
 2. [Technologies](#2-technologies)  
-3. [ERD + Use Case Diagram](#3-erd--use-case-diagram)  
+3. [System Diagrams](#3-system-diagrams)  
 4. [Project Structure](#4-project-structure)  
 5. [Installation & Running](#5-installation--running)  
 6. [API Documentation & Swagger UI](#6-api-documentation--swagger-ui)  
@@ -29,7 +29,7 @@ This project is a **Sushi Restaurant Management System** that provides REST APIs
 - Managing Order Details  
 
 The project follows a **layered/clean architecture**:  
-- `domain` → core entities  
+- `domain` → core entities & domain rules  
 - `application` → business logic / services  
 - `infrastructure` → persistence (database models, repositories)  
 - `presentation` → REST API routes  
@@ -50,15 +50,37 @@ For details, see [docs/architecture.md](docs/architecture.md).
 
 ---
 
-## 3. ERD + Use Case Diagram
+## 3. System Diagrams
 
-### Entity Relationship Diagram (ERD)
+### 3.1. Entity Relationship Diagram (ERD)
 
-![ERD](docs/ERD_SushiRestaurant.png)
+![ERD](docs/diagrams/erd/erd.png)
 
-### Use Case Diagram
+### 3.2. Use Case Diagram
 
-![Use Case Diagram](docs/UseCase_SushiRestaurant.png)
+![Use Case Diagram](docs/diagrams/use_case/use_case.png)
+
+### 3.3. Activity Diagrams
+
+- Manage Sushi Item
+
+    ![Activity Manage Sushi Item](docs/diagrams/activity/manage_sushi_item.png)
+
+- Manage Order workflow
+
+    ![Activity Manage Order](docs/diagrams/activity/manage_order.png)
+
+### 3.4. Sequence Diagrams
+
+- Customer create an account
+
+    ![Sequence Create Customer](docs/diagrams/sequence/customer/customer_create_customer.png)
+
+- Employee change order status
+
+    ![Sequence Patch Order](docs/diagrams/sequence/order/order_patch_order.png)
+
+For full diagrams, see [docs/diagrams.md](docs/diagrams.md)
 
 ---
 
@@ -66,37 +88,29 @@ For details, see [docs/architecture.md](docs/architecture.md).
 
 ```markdown
 sushi-restaurant-management/
-│── wsgi.py
-│── requirements.txt / pyproject.toml
-│── app/
-│ ├── init.py
-│ ├── config.py
-│ ├── extensions.py
-│ ├── domain/
-│ │ ├── customer.py
-│ │ ├── sushi_item.py
-│ │ ├── order.py
-│ │ └── order_detail.py
-│ ├── application/
-│ │ ├── customer_service.py
-│ │ ├── sushi_item_service.py
-│ │ ├── order_service.py
-│ │ └── order_detail_service.py
-│ ├── infrastructure/
-│ │ ├── models/
-│ │ └── repositories/
-│ └── presentation/
-│ ├── customer_route.py
-│ ├── sushi_item_route.py
-│ ├── order_route.py
-│ └── order_detail_route.py
-│── migrations/ (if using Flask-Migrate)
-│── tests/
-│ ├── conftest.py
-│ ├── customer_test.py
-│ ├── sushi_item_test.py
-│ ├── order_test.py
-│ └── order_detail_test.py
+├── app/ # Main application code
+│ ├── core/ # Core config, logging, error handling
+│ ├── modules/ # Domain modules
+│ │ ├── customer/ # Customer API + business logic
+│ │ ├── order/ # Order API + business logic
+│ │ ├── order_detail/ # Order detail API
+│ │ └── sushi_item/ # Sushi item API
+│ ├── application/ # Service layer (use cases)
+│ ├── domain/ # Entities, exceptions
+│ ├── infrastructure/ # Database models & repositories
+│ └── presentation/ # Controllers, schemas (Flask + Pydantic)
+│
+├── docs/ # Documentation (architecture, api_doc, diagrams)
+├── migrations/ # Alembic migrations
+├── tests/ # Unit tests (pytest)
+├── instance/ # Local DB (sqlite)
+│
+├── swagger.json # OpenAPI spec
+├── wsgi.py # App entrypoint
+├── Dockerfile # Docker build
+├── docker-compose.yml # Container orchestration
+├── requirements.txt # Dependencies
+├── pyproject.toml # Project metadata
 ```
 
 ---
@@ -109,7 +123,7 @@ git clone https://github.com/takahashidan85/sushi-restaurant-management.git
 cd sushi-restaurant-management
 ```
 
-#### (Recommended) create virtual environment
+#### Create virtual environment
 ```bash
 python -m venv .venv
 ```
@@ -128,13 +142,11 @@ If you got error, run PowerShell as Administrator and execute:
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
-Press **Y** to process
 
 Linux/macOS:
 ```bash
 source .venv/bin/activate
 ```
-
 
 ### 5.2. Install dependencies
 
@@ -143,10 +155,17 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 5.3. Database Migration
+### 5.3. Environment Variables
 
-This project uses Flask-Migrate.
-The `migrations/` folder is already included in the repo. You only need to run:
+Copy the example file:
+
+```bash
+cp .env.example .env
+```
+Then edit .env if needed (database, secret key, etc.).
+
+### 5.4. Database Migration
+
 ```bash
 flask db upgrade
 ```
@@ -157,96 +176,108 @@ flask db migrate -m "describe your change"
 flask db upgrade
 ```
 
-### 5.4. Run the app
-
-```bash
-export FLASK_APP=wsgi.py
-export FLASK_ENV=development
-```
+### 5.5. Run the app
 
 ```bash
 flask run --host=0.0.0.0 --port=8000
 ```
 
 Or run with Gunicorn:
-```
+```bash
 pip install gunicorn
 gunicorn --bind 0.0.0.0:8000 wsgi:app
 ```
 
-### 5.5. Run with Docker (optional)
-
-Make sure Docker has been installed on your computer.
+### 5.6. Run with Docker (optional)
+Using docker-compose (recommended):
+```bash
+cp .env.example .env
+docker-compose up --build
+```
+Or build manually:
 ```bash
 docker build -t sushi-app .
-docker run -p 8000:8000 sushi-app
+docker run -p 5000:5000 --env-file .env sushi-app
 ```
+
+
 ---
 
 ## 6. API Documentation & Swagger UI
 
-If Swagger (Flasgger) is enabled, access API docs at:
-```bash
-http://localhost:8000/apidocs
+Swagger (Flasgger) provides auto-generated docs.
+
+- Swagger UI: [http://localhost:8000/apidocs](http://localhost:8000/apidocs)  
+- OpenAPI JSON: [http://localhost:8000/apispec_1.json](http://localhost:8000/apispec_1.json)  
+
+### Example Endpoints
+
+**Create Customer**
+```http
+POST /customers
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "email": "alice@example.com"
+}
+```
+Response `201 Created`:
+```json
+{
+  "id": 1,
+  "name": "Alice",
+  "email": "alice@example.com"
+}
 ```
 
-Or OpenAPI JSON at:
-```bash
-http://localhost:8000/apispec_1.json
+**Get All Customers**
+```http
+GET /customers
 ```
-
-Main Endpoints:
-
-`/customers` → CRUD for customers
-`/sushi_items` → CRUD for sushi items
-`/orders` → CRUD for orders
-`/order_details` → CRUD for order details
+Response `200 OK`:
+```json
+[
+  {"id": 1, "name": "Alice", "email": "alice@example.com"}
+]
+```
 
 ---
 
 ## 7. Unit Testing
 
-Unit tests are written with pytest. The tests use an in-memory SQLite database so they are safe and isolated.
-
-Run tests with:
-```bash
-pytest -v
-```
-
-Tests cover CRUD functionality for:
-- Customers
-- Sushi Items
-- Orders
-- Order Details
+*(placeholder)*
 
 ---
 
 ## 8. Learning Objectives
 
-- Apply layered / clean architecture in software development.
-- Implement RESTful CRUD APIs with Flask.
-- Generate API documentation with Swagger.
-- Manage database schema with Flask-Migrate.
-- Write unit tests with pytest.
-- Deploy application using Docker.
+- Apply layered / clean architecture.  
+- Implement RESTful CRUD APIs with Flask.  
+- Generate API documentation with Swagger.  
+- Manage database schema with Flask-Migrate.  
+- Write unit tests with pytest.  
+- Deploy application using Docker.  
 
 ---
 
 ## 9. Future Improvements
 
-- Add authentication (JWT).
-- Build frontend (Web/Mobile).
-- Deploy to cloud (Heroku, DigitalOcean, etc.).
-- Add logging, CI/CD workflows.
+- Add authentication (JWT).  
+- Add request validation (Marshmallow or Pydantic).  
+- Build frontend (Web/Mobile).  
+- Deploy to cloud (Heroku, DigitalOcean, etc.).  
+- Add structured logging.  
+- Add CI/CD with GitHub Actions.  
 
 ---
 
 ## 10. About the author
 
-- **Name:** Trần Cát Đằng (Takahashi Dan)
-- **Email:** catdangtran1@gmail.com
-- **Discord:** TakahashiDan
-- **Github:** https://github.com/takahashidan85
+- **Name:** Trần Cát Đằng (Takahashi Dan)  
+- **Email:** catdangtran1@gmail.com  
+- **Discord:** TakahashiDan  
+- **Github:** https://github.com/takahashidan85  
 
 ---
 

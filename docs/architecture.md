@@ -2,7 +2,7 @@
 
 ## 1. Overview
 The Sushi Restaurant Management System is a **Flask-based web application** that provides RESTful APIs for managing customers, sushi items, orders, and order details.  
-The application is designed to demonstrate layered architecture with clear separation between presentation, application, domain, and infrastructure layers.
+It demonstrates **clean layered architecture** with separation of concerns.
 
 ---
 
@@ -22,8 +22,7 @@ The application is designed to demonstrate layered architecture with clear separ
                │
 ┌──────────────┴──────────────┐
 │          Domain              │
-│ (Entities, core business     │
-│   rules, data contracts)     │
+│ (Entities, rules, contracts) │
 └──────────────┬──────────────┘
                │
 ┌──────────────┴──────────────┐
@@ -31,64 +30,86 @@ The application is designed to demonstrate layered architecture with clear separ
 │ (SQLAlchemy ORM, Repos, DB)  │
 └─────────────────────────────┘
 ```
-- **Presentation**: Flask Blueprints (`customer_route.py`, `sushi_item_route.py`, `order_route.py`, `order_detail_route.py`) expose RESTful APIs. Swagger UI (`/apidocs`) provides interactive documentation.
-- **Application**: Service classes (e.g., `CustomerService`, `OrderService`) handle business logic and orchestrate CRUD operations.
-- **Domain**: Contains core entities and domain logic.
-- **Infrastructure**: Implements repositories and SQLAlchemy models to interact with the database.
+
+---
 
 ## 3. Components
 
 ### 3.1 Presentation Layer
-
-- Framework: **Flask**
-- Features:
-    - API endpoints for CRUD operations
-    - Swagger UI for API documentation (`flasgger` + `flask-swagger-ui`)
+- **Framework**: Flask  
+- **Features**:  
+  - REST API endpoints (CRUD).  
+  - Swagger UI (`/apidocs`).  
+- Example: `customer_route.py` defines `/customers` endpoints.
 
 ### 3.2 Application Layer
-
-- Encapsulates business logic
-- Services delegate requests from routes to repositories
+- **Services** orchestrate CRUD operations.  
+- Example:  
+  - `CustomerService`: create customer only if email is unique.  
+  - `OrderService`: validate order has at least one detail.
 
 ### 3.3 Domain Layer
-
-- Defines the business entities (Customer, Order, SushiItem, OrderDetail)
-- Provides abstractions decoupled from persistence layer
+- **Entities**: Customer, Order, SushiItem, OrderDetail.  
+- **Business rules**:  
+  - Customer email must be unique.  
+  - An Order must have at least one OrderDetail.  
+  - Total price is calculated from `OrderDetails`.  
 
 ### 3.4 Infrastructure Layer
+- **Database**: SQLAlchemy ORM.  
+- **Repositories**: isolate DB logic.  
+  - Example: `CustomerRepository.get_by_email(email)`.  
+- **Migrations**: Flask-Migrate (Alembic).  
+- **Supported DBs**: SQLite (default), SQL Server (via pyodbc).  
 
-- Database: **SQLAlchemy ORM**
-- Migration tool: **Flask-Migrate (Alembic)**
-- Supports **SQLite** (default) and **SQL Server** (via extension)
+---
 
 ## 4. Database Design
 
-See the [Entity Relationship Diagram (ERD)](ERD_SushiRestaurant.png) for table relationships.
+See the [ERD](ERD_SushiRestaurant.png).  
 
-Main entities:
+### Main Entities
+- **Customer**: id, name, email (unique).  
+- **SushiItem**: id, name, price, description.  
+- **Order**: id, customer_id (FK), status.  
+- **OrderDetail**: id, order_id (FK), sushi_item_id (FK), quantity.  
 
-- **Customer:** id, name, email
-- **SushiItem:** id, name, price, description
-- **Order:** id, customer_id, status
-- **OrderDetail:** id, order_id, sushi_item_id, quantity
+### Relationships
+- Customer 1 — n Orders.  
+- Order 1 — n OrderDetails.  
+- SushiItem 1 — n OrderDetails.  
+
+---
 
 ## 5. Deployment
 
 ### Local (development)
-
-- Run Flask app directly with `.venv`
-- Swagger UI available at `http://127.0.0.1:8000/apidocs`
+- Run Flask app in virtual environment.  
+- Swagger UI: `http://127.0.0.1:8000/apidocs`.  
 
 ### Docker (production-ready)
+- Built with `Dockerfile`.  
+- Run with:  
+  ```bash
+  docker build -t sushi-app .
+  docker run -p 8000:8000 --env-file .env sushi-app
+  ```  
+- **Gunicorn** is used as WSGI server.  
+- Environment variable `DATABASE_URL` must be set inside `.env`.  
 
-- Containerized using `Dockerfile`
-- Run with `docker build` and `docker run`
-- Gunicorn as WSGI server for better performance
+---
 
 ## 6. Extensions
+- **Flask** (framework).  
+- **SQLAlchemy** (ORM).  
+- **Flask-Migrate** (migration).  
+- **Flasgger** (Swagger docs).  
+- **Gunicorn** (WSGI production).  
 
-- **Flask** (framework)
-- **SQLAlchemy** (ORM)
-- **Flask-Migrate** (database migration)
-- **Flasgger** (Swagger API docs)
-- **Gunicorn** (production server, via Docker)
+---
+
+## 7. Future Enhancements
+- Add caching layer (Redis).  
+- Add background job processing (Celery).  
+- Integrate JWT Authentication.  
+- Add monitoring/logging (Prometheus + Grafana).  
