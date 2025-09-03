@@ -11,7 +11,7 @@ update_schema = OrderDetailUpdateSchema()
 response_schema = OrderDetailResponseSchema()
 response_list_schema = OrderDetailResponseSchema(many=True)
 
-@bp.route("/", methods=["POST"])
+@bp.route("", methods=["POST"])
 def create_order_detail():
     try:
         data = create_schema.load(request.get_json() or {})
@@ -20,17 +20,17 @@ def create_order_detail():
     except ValidationError as err:
         return error_response("Validation Error", 422, err.messages)
 
-@bp.route("/", methods=["GET"])
+@bp.route("", methods=["GET"])
 def list_order_details():
     ods = OrderDetailService.list_all()
     return success_response(response_list_schema.dump(ods), "Order details retrieved", 200)
 
-@bp.route("/<int:od_id>", methods=["GET"])
+@bp.route("<int:od_id>", methods=["GET"])
 def get_order_detail(od_id):
     od = OrderDetailService.get(od_id)
     return success_response(response_schema.dump(od), "Order detail retrieved", 200)
 
-@bp.route("/<int:od_id>", methods=["PUT"])
+@bp.route("<int:od_id>", methods=["PUT"])
 def update_order_detail(od_id):
     try:
         data = update_schema.load(request.get_json() or {})
@@ -39,7 +39,7 @@ def update_order_detail(od_id):
     except ValidationError as err:
         return error_response("Validation Error", 422, err.messages)
 
-@bp.route("/<int:od_id>", methods=["DELETE"])
+@bp.route("<int:od_id>", methods=["DELETE"])
 def delete_order_detail(od_id):
     OrderDetailService.delete(od_id)
-    return success_response(None, "Order detail deleted", 204)
+    return success_response(None, "Order detail deleted", 200)
