@@ -7,6 +7,7 @@ pyodbc==5.2.0
 bcrypt==4.1.2
 python-dotenv==1.0.1
 flasgger===0.9.7b2
+marshmallow>=3.20.1
 pytest
 pytest-flask
 pytest-cov
