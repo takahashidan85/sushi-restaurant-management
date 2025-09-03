@@ -1,0 +1,424 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sushi Restaurant Management API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/customers": {
+      "post": {
+        "summary": "Create a new customer",
+        "tags": ["Customer"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "email": {"type": "string"}
+                },
+                "required": ["name", "email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Customer created",
+            "content": {
+              "application/json": {
+                "example": {"status": "success", "message": "Customer created"}
+              }
+            }
+          },
+          "422": {"description": "Validation Error"},
+          "409": {"description": "Customer already exists"}
+        }
+      },
+      "get": {
+        "summary": "List all customers",
+        "tags": ["Customer"],
+        "responses": {
+          "200": {
+            "description": "List of customers",
+            "content": {"application/json": {}}
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "summary": "Get customer by ID",
+        "tags": ["Customer"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "Customer retrieved"},
+          "404": {"description": "Customer not found"}
+        }
+      },
+      "put": {
+        "summary": "Update customer",
+        "tags": ["Customer"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "email": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Customer updated"},
+          "404": {"description": "Customer not found"}
+        }
+      },
+      "delete": {
+        "summary": "Delete customer",
+        "tags": ["Customer"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer deleted",
+            "content": {
+              "application/json": {
+                "example": {"status": "success", "message": "Customer deleted"}
+              }
+            }
+          },
+          "404": {"description": "Customer not found"}
+        }
+      }
+    },
+
+    "/sushi-items": {
+      "post": {
+        "summary": "Create a new sushi item",
+        "tags": ["SushiItem"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "price": {"type": "number"},
+                  "category": {"type": "string"},
+                  "description": {"type": "string"}
+                },
+                "required": ["name", "price"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {"description": "Sushi item created"},
+          "422": {"description": "Validation Error"}
+        }
+      },
+      "get": {
+        "summary": "List all sushi items",
+        "tags": ["SushiItem"],
+        "responses": {
+          "200": {"description": "List of sushi items"}
+        }
+      }
+    },
+    "/sushi-items/{id}": {
+      "get": {
+        "summary": "Get sushi item by ID",
+        "tags": ["SushiItem"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "Sushi item retrieved"},
+          "404": {"description": "Sushi item not found"}
+        }
+      },
+      "put": {
+        "summary": "Update sushi item",
+        "tags": ["SushiItem"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "price": {"type": "number"},
+                  "category": {"type": "string"},
+                  "description": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Sushi item updated"},
+          "404": {"description": "Sushi item not found"}
+        }
+      },
+      "delete": {
+        "summary": "Delete sushi item",
+        "tags": ["SushiItem"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Sushi item deleted",
+            "content": {
+              "application/json": {
+                "example": {"status": "success", "message": "Sushi item deleted"}
+              }
+            }
+          },
+          "404": {"description": "Sushi item not found"}
+        }
+      }
+    },
+
+    "/orders": {
+      "post": {
+        "summary": "Create a new order",
+        "tags": ["Order"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_id": {"type": "integer"},
+                  "order_type": {"type": "string", "enum": ["dine-in", "take_out", "delivery"]}
+                },
+                "required": ["customer_id", "order_type"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {"description": "Order created"},
+          "422": {"description": "Validation Error"}
+        }
+      },
+      "get": {
+        "summary": "List all orders",
+        "tags": ["Order"],
+        "responses": {
+          "200": {"description": "List of orders"}
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "summary": "Get order by ID",
+        "tags": ["Order"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "Order retrieved"},
+          "404": {"description": "Order not found"}
+        }
+      },
+      "put": {
+        "summary": "Update order",
+        "tags": ["Order"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {"customer_id": {"type": "integer"}}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Order updated"},
+          "404": {"description": "Order not found"}
+        }
+      },
+      "delete": {
+        "summary": "Delete order",
+        "tags": ["Order"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Order deleted",
+            "content": {
+              "application/json": {
+                "example": {"status": "success", "message": "Order deleted"}
+              }
+            }
+          },
+          "404": {"description": "Order not found"}
+        }
+      }
+    },
+    "/orders/{id}/status": {
+      "patch": {
+        "summary": "Update order status",
+        "tags": ["Order"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "new_status": {"type": "string"}
+                },
+                "required": ["new_status"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Order status updated"},
+          "400": {"description": "Invalid status transition"},
+          "404": {"description": "Order not found"}
+        }
+      }
+    },
+    "/orders/{id}/force-status": {
+      "patch": {
+        "summary": "Force update order status (admin only)",
+        "tags": ["Order"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {"new_status": {"type": "string"}},
+                "required": ["new_status"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Order status force-updated"},
+          "422": {"description": "Validation Error"},
+          "500": {"description": "Server Error"}
+        }
+      }
+    },
+
+    "/order-details": {
+      "post": {
+        "summary": "Create order detail",
+        "tags": ["OrderDetail"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "order_id": {"type": "integer"},
+                  "sushi_item_id": {"type": "integer"},
+                  "quantity": {"type": "integer"}
+                },
+                "required": ["order_id", "sushi_item_id", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {"description": "Order detail created"},
+          "422": {"description": "Validation Error"}
+        }
+      },
+      "get": {
+        "summary": "List all order details",
+        "tags": ["OrderDetail"],
+        "responses": {
+          "200": {"description": "List of order details"}
+        }
+      }
+    },
+    "/order-details/{id}": {
+      "get": {
+        "summary": "Get order detail by ID",
+        "tags": ["OrderDetail"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "Order detail retrieved"},
+          "404": {"description": "Order detail not found"}
+        }
+      },
+      "put": {
+        "summary": "Update order detail",
+        "tags": ["OrderDetail"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {"quantity": {"type": "integer"}}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "Order detail updated"},
+          "404": {"description": "Order detail not found"}
+        }
+      },
+      "delete": {
+        "summary": "Delete order detail",
+        "tags": ["OrderDetail"],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Order detail deleted",
+            "content": {
+              "application/json": {
+                "example": {"status": "success", "message": "Order detail deleted"}
+              }
+            }
+          },
+          "404": {"description": "Order detail not found"}
+        }
+      }
+    }
+  }
+}

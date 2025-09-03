@@ -3,9 +3,6 @@ from flask import jsonify, Response
 def success_response(data=None, message="OK", status_code=200):
     """Generate a standardized success response."""
 
-    if status_code == 204:
-        return Response(status=204)
-
     payload = {
         "status": "success",
         "message": message
