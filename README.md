@@ -207,8 +207,8 @@ docker run -p 5000:5000 --env-file .env sushi-app
 
 Swagger (Flasgger) provides auto-generated docs.
 
-- Swagger UI: [http://localhost:8000/apidocs](http://localhost:8000/apidocs)  
-- OpenAPI JSON: [http://localhost:8000/apispec_1.json](http://localhost:8000/apispec_1.json)  
+- Swagger UI: [http://127.0.0.1:5000/swagger](http://127.0.0.1:5000/swagger)  
+- OpenAPI JSON: [http://127.0.0.1:5000/static/swagger.json](http://127.0.0.1:5000/static/swagger.json)  
 
 ### Example Endpoints
 
