@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from marshmallow import ValidationError
 from app.core.responses import success_response, error_response
 from ..application.service import SushiItemService
+from ..domain.exceptions import SushiItemAlreadyExistsError
 from .schema import SushiItemCreateSchema, SushiItemUpdateSchema, SushiItemResponseSchema
 
 bp = Blueprint('sushi_item', __name__, url_prefix='/sushi-items')
@@ -20,6 +21,8 @@ def create_sushi_item():
         return success_response(response_schema.dump(item), "Sushi item created", 201)
     except ValidationError as err:
         return error_response("Validation Error", 400, err.messages)
+    except SushiItemAlreadyExistsError as err:
+        return error_response(str(err), 409)
     
 @bp.route('', methods=['GET'])
 def list_sushi_items():

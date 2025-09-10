@@ -1,9 +1,14 @@
 from ..infrastructure.repository import SushiItemRepository
+from ..domain.exceptions import SushiItemAlreadyExistsError
 
 class SushiItemService:
     @staticmethod
     def create(name, price, category=None, description=None):
-        return SushiItemRepository.add(name, float(price), category, description)
+        from ..infrastructure.models import SushiItemModel
+        existing = SushiItemModel.query.filter_by(name=name).first()
+        if existing:
+            raise SushiItemAlreadyExistsError(f"Sushi item '{name}' already exists")
+        return SushiItemRepository.add(name, price, category, description)
 
     @staticmethod
     def list_all():

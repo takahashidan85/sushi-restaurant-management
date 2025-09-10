@@ -11,7 +11,7 @@ class SushiItemRepository:
         return SushiItem(model.id, model.name, model.price, model.category, model.description)
     
     @staticmethod
-    def add(name: str, price: float, category: str, description: str | None) -> SushiItem:
+    def add(name: str, price: int, category: str, description: str | None) -> SushiItem:
         item = SushiItemModel(name=name, price=price, category=category, description=description)
         db.session.add(item)
         db.session.commit()
@@ -30,7 +30,7 @@ class SushiItemRepository:
         return SushiItemRepository._to_entity(item)
     
     @staticmethod
-    def update(item_id: int, name: str | None, price: float | None, category: str | None, description: str | None) -> SushiItem | None:
+    def update(item_id: int, name: str | None, price: int | None, category: str | None, description: str | None) -> SushiItem | None:
         item = SushiItemModel.query.get(item_id)
         if not item:
             raise SushiItemNotFoundError(f"Sushi item with ID {item_id} not found.")
