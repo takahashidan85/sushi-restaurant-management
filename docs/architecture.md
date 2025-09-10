@@ -2,7 +2,7 @@
 
 ## 1. Overview
 The Sushi Restaurant Management System is a **Flask-based web application** that provides RESTful APIs for managing customers, sushi items, orders, and order details.  
-It demonstrates **clean layered architecture** with separation of concerns.
+It demonstrates **clean layered architecture** with separation of concerns and scalability in mind.
 
 ---
 
@@ -40,13 +40,15 @@ It demonstrates **clean layered architecture** with separation of concerns.
 - **Features**:  
   - REST API endpoints (CRUD).  
   - Swagger UI (`/apidocs`).  
+  - Request and response logging for debugging.  
 - Example: `customer_route.py` defines `/customers` endpoints.
 
 ### 3.2 Application Layer
-- **Services** orchestrate CRUD operations.  
+- **Services** orchestrate CRUD operations and enforce business rules.  
 - Example:  
   - `CustomerService`: create customer only if email is unique.  
-  - `OrderService`: validate order has at least one detail.
+  - `OrderService`: validate order has at least one detail and ensure valid status transitions.  
+  - `SushiItemService`: ensure sushi item price is non-negative.
 
 ### 3.3 Domain Layer
 - **Entities**: Customer, Order, SushiItem, OrderDetail.  
@@ -54,6 +56,8 @@ It demonstrates **clean layered architecture** with separation of concerns.
   - Customer email must be unique.  
   - An Order must have at least one OrderDetail.  
   - Total price is calculated from `OrderDetails`.  
+  - SushiItem price must be greater than or equal to zero.  
+  - Order status transitions must follow predefined rules (e.g., `pending` → `completed`).
 
 ### 3.4 Infrastructure Layer
 - **Database**: SQLAlchemy ORM.  
@@ -61,18 +65,19 @@ It demonstrates **clean layered architecture** with separation of concerns.
   - Example: `CustomerRepository.get_by_email(email)`.  
 - **Migrations**: Flask-Migrate (Alembic).  
 - **Supported DBs**: SQLite (default), SQL Server (via pyodbc).  
+- **Logging**: Centralized logging for actions and errors.  
 
 ---
 
 ## 4. Database Design
 
-See the [ERD](ERD_SushiRestaurant.png).  
+See the [ERD](diagrams/erd/erd.png).  
 
 ### Main Entities
 - **Customer**: id, name, email (unique).  
-- **SushiItem**: id, name, price, description.  
-- **Order**: id, customer_id (FK), status.  
-- **OrderDetail**: id, order_id (FK), sushi_item_id (FK), quantity.  
+- **SushiItem**: id, name, price, description, category.  
+- **Order**: id, customer_id (FK), status, order_type, create_time.  
+- **OrderDetail**: id, order_id (FK), sushi_item_id (FK), quantity, unit_price.  
 
 ### Relationships
 - Customer 1 — n Orders.  
@@ -105,6 +110,7 @@ See the [ERD](ERD_SushiRestaurant.png).
 - **Flask-Migrate** (migration).  
 - **Flasgger** (Swagger docs).  
 - **Gunicorn** (WSGI production).  
+- **RotatingFileHandler** (logging).  
 
 ---
 
@@ -113,3 +119,6 @@ See the [ERD](ERD_SushiRestaurant.png).
 - Add background job processing (Celery).  
 - Integrate JWT Authentication.  
 - Add monitoring/logging (Prometheus + Grafana).  
+- Implement role-based access control (RBAC) for admin and staff users.  
+- Add support for PostgreSQL in production.  
+- Enhance API rate limiting for better security.

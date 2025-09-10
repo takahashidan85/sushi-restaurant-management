@@ -51,19 +51,20 @@ Request Body:
 
 Responses:
 - 201 Created:
-  {"status": "success", "message": "Customer created"}
-- 422 Validation Error
+  {
+    "status": "success", 
+    "message": "Customer created"
+  }
 - 409 Customer already exists
+- 422 Validation Error
 
 ---
 
 ### GET /customers
 Description: List all customers.
 
-Response 200:
-[
-  {"id": 1, "name": "Alice", "email": "alice@example.com"}
-]
+Responses:
+- 200 List of customers
 
 ---
 
@@ -104,8 +105,11 @@ Path Parameter:
 - id (integer, required)
 
 Responses:
-- 200 OK:
-  {"status": "success", "message": "Customer deleted"}
+- 200 Customer deleted:
+  {
+    "status": "success",
+    "message": "Customer deleted"
+    }
 - 404 Customer not found
 
 ---
@@ -125,6 +129,7 @@ Request Body:
 
 Responses:
 - 201 Sushi item created
+- 409 Sushi item already exists
 - 422 Validation Error
 
 ---
@@ -132,7 +137,8 @@ Responses:
 ### GET /sushi-items
 Description: List all sushi items.
 
-Response 200: JSON array of items.
+Response 
+- 200 List of sushi items
 
 ---
 
@@ -175,8 +181,11 @@ Path Parameter:
 - id (integer, required)
 
 Responses:
-- 200 OK:
-  {"status": "success", "message": "Sushi item deleted"}
+- 200 Sushi item deleted:
+  {
+    "status": "success", 
+    "message": "Sushi item deleted"
+  }
 - 404 Sushi item not found
 
 ---
@@ -189,11 +198,19 @@ Description: Create a new order.
 Request Body:
 {
   "customer_id": 1,
-  "order_type": "dine-in"
+  "order_type": "dine_in"
 }
 
 Responses:
-- 201 Order created
+- 201 Order created:
+  {
+    "id": 1,
+    "customer_id": 2,
+    "order_type": "dine-in",
+    "create_time": "2025-09-03T10:00:00+07:00",
+    "total_price": 0
+  }
+- 404 Customer not found
 - 422 Validation Error
 
 ---
@@ -201,7 +218,8 @@ Responses:
 ### GET /orders
 Description: List all orders.
 
-Response 200: JSON array of orders.
+Responses:
+- 200 List of orders
 
 ---
 
@@ -242,7 +260,10 @@ Path Parameter:
 
 Responses:
 - 200 OK:
-  {"status": "success", "message": "Order deleted"}
+  {
+    "status": "success", 
+    "message": "Order deleted"
+  }
 - 404 Order not found
 
 ---
@@ -260,8 +281,9 @@ Request Body:
 
 Responses:
 - 200 Order status updated
-- 400 Invalid status transition
 - 404 Order not found
+- 409 Invalid status transition
+- 422 Invalid status value
 
 ---
 
@@ -297,6 +319,13 @@ Request Body:
 
 Responses:
 - 201 Order detail created
+  {
+    "id": 1,
+    "order_id": 1,
+    "sushi_item_id": 5,
+    "quantity": 2,
+    "unit_price": 60000
+  }
 - 422 Validation Error
 
 ---
@@ -304,7 +333,8 @@ Responses:
 ### GET /order-details
 Description: List all order details.
 
-Response 200: JSON array of order details.
+Responses:
+- 200 List of order details
 
 ---
 
@@ -345,7 +375,10 @@ Path Parameter:
 
 Responses:
 - 200 OK:
-  {"status": "success", "message": "Order detail deleted"}
+  {
+    "status": "success", 
+    "message": "Order detail deleted"
+  }
 - 404 Order detail not found
 
 ---
