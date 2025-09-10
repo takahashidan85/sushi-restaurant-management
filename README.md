@@ -86,31 +86,42 @@ For full diagrams, see [docs/diagrams.md](docs/diagrams.md)
 
 ## 4. Project Structure  
 
+The repository is organized to clearly separate **core infrastructure**, **domain modules**, and **documentation**, making it easier to maintain, test, and extend.
 ```markdown
 sushi-restaurant-management/
-├── app/ # Main application code
-│ ├── core/ # Core config, logging, error handling
-│ ├── modules/ # Domain modules
-│ │ ├── customer/ # Customer API + business logic
-│ │ ├── order/ # Order API + business logic
-│ │ ├── order_detail/ # Order detail API
-│ │ └── sushi_item/ # Sushi item API
-│ ├── application/ # Service layer (use cases)
-│ ├── domain/ # Entities, exceptions
-│ ├── infrastructure/ # Database models & repositories
-│ └── presentation/ # Controllers, schemas (Flask + Pydantic)
 │
-├── docs/ # Documentation (architecture, api_doc, diagrams)
-├── migrations/ # Alembic migrations
+├── app/ # Main application source
+│ ├── core/ # Global config, DB extensions, error handler, logging
+│ ├── modules/ # Domain-driven modules
+│ │ ├── customer/
+│ │ │ ├── domain/ # Domain entities & rules
+│ │ │ ├── application/ # Business logic / services
+│ │ │ ├── infrastructure/ # Models, repository
+│ │ │ └── presentation/ # API routes (Flask Blueprints)
+│ │ ├── order/
+│ │ ├── order_detail/
+│ │ └── sushi_item/
+│ │
+│ ├── static/ # Static files (including swagger.json for Swagger UI)
+│ ├── app_factory.py # Application factory (create_app)
+│ └── init.py
+│
+├── docs/ # Documentation
+│ ├── architecture.md # Overview of architecture & design decisions
+│ ├── api.md # API documentation (overview, usage, endpoints)
+│ ├── diagrams/ # All diagrams: ERD, UCD, Sequence, Activity
+│ └── diagrams.md # Quick review: list and explanation of diagrams
+│
+├── migrations/ # Alembic migrations for database schema
 ├── tests/ # Unit tests (pytest)
-├── instance/ # Local DB (sqlite)
 │
-├── swagger.json # OpenAPI spec
-├── wsgi.py # App entrypoint
-├── Dockerfile # Docker build
-├── docker-compose.yml # Container orchestration
-├── requirements.txt # Dependencies
-├── pyproject.toml # Project metadata
+├── seed.py # Script to seed sample data for demo/testing
+├── manage.py # Flask CLI entrypoint (migrations, seeding, etc.)
+├── .env.example # Example environment variables (DB config, secrets)
+├── requirements.txt # Python dependencies
+├── Dockerfile # Docker build for Flask API
+├── docker-compose.yml # Orchestration for API + PostgreSQL
+└── README.md
 ```
 
 ---
@@ -343,12 +354,11 @@ pytest -v
 ### Notes
 
 The project includes a seed.py script to populate the database with initial data (customers, sushi items, orders).
-
-Running this before tests ensures that customer_id=1 and sushi_item_id=1 exist for order-related tests:
+- Running this before tests ensures that customer_id=1 and sushi_item_id=1 exist for order-related tests:
 ```bash
 python seed.py
 ```
-Warnings may appear due to deprecated APIs in Flask/SQLAlchemy, but they do not affect test correctness.
+- Warnings may appear due to deprecated APIs in Flask/SQLAlchemy, but they do not affect test correctness.
 
 
 ---
