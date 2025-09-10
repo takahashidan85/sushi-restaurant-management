@@ -6,6 +6,8 @@ class OrderDetailCreateSchema(Schema):
     quantity = fields.Int(required=True, validate=validate.Range(min=1))
 
 class OrderDetailUpdateSchema(Schema):
+    sushi_item_id = fields.Int(required=False)
+    order_id = fields.Int(required=False)
     quantity = fields.Int(validate=validate.Range(min=1))
 
 class OrderDetailResponseSchema(Schema):
@@ -13,4 +15,4 @@ class OrderDetailResponseSchema(Schema):
     order_id = fields.Int()
     sushi_item_id = fields.Int()
     quantity = fields.Int()
-    total_price = fields.Float()
+    unit_price = fields.Int()

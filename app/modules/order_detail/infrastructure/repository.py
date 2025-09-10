@@ -9,7 +9,7 @@ class OrderDetailRepository:
 
     @staticmethod
     def _to_entity(model: OrderDetailModel) -> OrderDetail:
-        return OrderDetail(model.id, model.order_id, model.sushi_item_id, model.quantity, model.total_price)
+        return OrderDetail(model.id, model.order_id, model.sushi_item_id, model.quantity, model.unit_price)
     
     @staticmethod
     def add(order_id: int, sushi_item_id: int, quantity: int = 1) -> OrderDetail:
@@ -17,8 +17,8 @@ class OrderDetailRepository:
         if not sushi_item:
             raise OrderDetailNotFoundError(f"Sushi item with ID {sushi_item_id} not found.")
         
-        total_price = sushi_item.price * quantity
-        od = OrderDetailModel(order_id=order_id, sushi_item_id=sushi_item_id, quantity=quantity, total_price=total_price)
+        unit_price = sushi_item.price * quantity
+        od = OrderDetailModel(order_id=order_id, sushi_item_id=sushi_item_id, quantity=quantity, unit_price=unit_price)
         db.session.add(od)
         db.session.commit()
         return OrderDetailRepository._to_entity(od)
@@ -47,7 +47,7 @@ class OrderDetailRepository:
         
         if quantity:
             od.quantity = quantity
-            od.total_price = od.sushi_item.price * quantity
+            od.unit_price = od.sushi_item.price * quantity
         db.session.commit()
         return OrderDetailRepository._to_entity(od)
 
