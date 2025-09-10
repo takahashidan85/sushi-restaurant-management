@@ -6,6 +6,7 @@ Flask-SQLAlchemy==3.1.1
 Flask-Migrate==4.0.5
 alembic==1.13.1
 pyodbc==5.2.0
+psycopg2-binary>=2.9.9
 
 bcrypt==4.1.2
 python-dotenv==1.0.1
@@ -18,12 +19,8 @@ flask-swagger-ui>=3.36.0
 flask-cors==4.0.0
 
 pytest>=8.2.2
-pytest-flask==1.2.0
 pytest-cov==5.0.0
 coverage==7.3.1
 requests==2.32.3
-
-selenium==4.23.1
-webdriver-manager==4.0.2
 
 
