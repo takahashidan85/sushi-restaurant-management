@@ -17,4 +17,4 @@ ENV FLASK_ENV=production
 
 EXPOSE 5000
 
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "app_factory:create_app()"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "wsgi:app"]
