@@ -179,27 +179,58 @@ flask db upgrade
 ### 5.5. Run the app
 
 ```bash
-flask run --host=0.0.0.0 --port=8000
+flask run
 ```
-
-Or run with Gunicorn:
-```bash
-pip install gunicorn
-gunicorn --bind 0.0.0.0:8000 wsgi:app
-```
+The application will be accessible at [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
 ### 5.6. Run with Docker (optional)
-Using docker-compose (recommended):
+
+#### Using docker-compose (recommended):
+
+##### Step-by-step instruction
+
+1. Make sure [Docker](https://www.docker.com/get-started/) is installed
+2. Copy environment variables
 ```bash
 cp .env.example .env
+```
+3. Build and start containers
+```bash
 docker-compose up --build
 ```
-Or build manually:
+This starts:
+- `sushi_api` → Flask app (served by Gunicorn)
+- `sushi_db` → PostgreSQL 15 database
+
+4. Run database migrations
+
+```bash
+docker exec -it sushi_api flask db upgrade
+```
+
+5. Seed sample data (Optional)
+  
+To populate the database with demo customers, sushi items, and a sample order:
+```bash
+docker exec -it sushi_api python seed.py
+```
+This will reset the database (drop & recreate tables) and insert some initial data for testing/demo purposes.
+
+6. Verify that the containers are running
+- API will be available locally once the containers start.
+- For detailed endpoints, Swagger UI, and example requests, see [6. API Documentation & Swagger UI](#6-api-documentation--swagger-ui).
+
+7. Stop containers
+```bash
+docker compose down
+```
+---
+
+#### Manual build (alternative):
 ```bash
 docker build -t sushi-app .
 docker run -p 5000:5000 --env-file .env sushi-app
 ```
-
 
 ---
 
@@ -210,43 +241,115 @@ Swagger (Flasgger) provides auto-generated docs.
 - Swagger UI: [http://127.0.0.1:5000/swagger](http://127.0.0.1:5000/swagger)  
 - OpenAPI JSON: [http://127.0.0.1:5000/static/swagger.json](http://127.0.0.1:5000/static/swagger.json)  
 
+---
+
+### Endpoint Overview
+
+| Resource       | Endpoint(s)                              | Methods              | Description                                |
+|----------------|-------------------------------------------|----------------------|--------------------------------------------|
+| **Customers**  | `/customers`                              | GET, POST            | List all customers / Create new customer    |
+|                | `/customers/{id}`                         | GET, PUT, DELETE     | Retrieve, update, or delete a customer      |
+| **Sushi Items**| `/sushi-items`                            | GET, POST            | List all sushi items / Create new item      |
+|                | `/sushi-items/{id}`                       | GET, PUT, DELETE     | Retrieve, update, or delete a sushi item    |
+| **Orders**     | `/orders`                                 | GET, POST            | List all orders / Create new order          |
+|                | `/orders/{id}`                            | GET, PUT, DELETE     | Retrieve, update, or delete an order        |
+|                | `/orders/{id}/status`                     | PATCH                | Update order status (normal flow)           |
+|                | `/orders/{id}/force-status`               | PATCH                | Force update order status (admin only)      |
+| **Order Details** | `/order-details`                       | GET, POST            | List all order details / Create new detail  |
+|                | `/order-details/{id}`                     | GET, PUT, DELETE     | Retrieve, update, or delete an order detail |
+
+---
 ### Example Endpoints
 
-**Create Customer**
+**Add a sushi item**
 ```http
-POST /customers
+POST /sushi-items
 Content-Type: application/json
 
 {
-  "name": "Alice",
-  "email": "alice@example.com"
+  "name": "Salmon Nigiri",
+  "price": 50000,
+  "category": "nigiri",
+  "description": "Fresh salmon over rice"
 }
 ```
-Response `201 Created`:
+*Response (201 Created)*
 ```json
 {
   "id": 1,
-  "name": "Alice",
-  "email": "alice@example.com"
+  "name": "Salmon Nigiri",
+  "price": 50000,
+  "category": "nigiri",
+  "description": "Fresh salmon over rice"
 }
 ```
-
-**Get All Customers**
+**Create a new order**
 ```http
-GET /customers
-```
-Response `200 OK`:
-```json
-[
-  {"id": 1, "name": "Alice", "email": "alice@example.com"}
-]
-```
+POST /orders
+Content-Type: application/json
 
+{
+  "customer_id": 1,
+  "order_type": "dine-in"
+}
+```
+*Response (201 Created)*
+```
+{
+  "order_id": 6,
+  "status": "created"
+}
+```
+**Add order details**
+```http
+POST /order-details
+Content-Type: application/json
+
+{
+  "order_id": 15,
+  "sushi_item_id": 2,
+  "quantity": 3
+}
+```
+*Response (201 Created)*
+```
+{
+  "order_id": 6,
+  "status": "created"
+}
+```
 ---
 
 ## 7. Unit Testing
 
-*(placeholder)*
+This project includes unit tests to verify core functionality of the API.
+
+- Test framework: **pytest**
+- Test client: **Flask built-in test client**
+- Location: All tests are stored in the `tests/` folder.
+
+### Test Coverage
+- `test_app.py`: Health check endpoint (`/ping`)
+- `test_customer.py`: Full CRUD for Customers (Create, Read, Update, Delete)
+- `test_sushi_item.py`: Full CRUD for Sushi Items
+- `test_order.py`: Basic tests for Orders (Create, Get, Delete)
+- `test_order_detail.py`: Basic tests for Order Details (Get list, Create, Delete if valid)
+
+### Usage
+Run all tests:
+```bash
+pytest -v
+```
+### Notes
+
+The project includes a seed.py script to populate the database with initial data (customers, sushi items, orders).
+
+Running this before tests ensures that customer_id=1 and sushi_item_id=1 exist for order-related tests:
+```bash
+python seed.py
+```
+Warnings may appear due to deprecated APIs in Flask/SQLAlchemy, but they do not affect test correctness.
+
 
 ---
 
