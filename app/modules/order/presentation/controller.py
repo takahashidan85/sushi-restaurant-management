@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from marshmallow import ValidationError
 from app.core.responses import success_response, error_response
 from ..application.service import OrderService
+from app.modules.customer.domain.exceptions import CustomerNotFoundError
 from .schema import OrderCreateSchema, OrderUpdateSchema, OrderStatusUpdateSchema, OrderResponseSchema
 
 bp = Blueprint('order', __name__, url_prefix='/orders')
@@ -21,6 +22,8 @@ def create_order():
         return success_response(response_schema.dump(order), "Order created", 201)
     except ValidationError as err:
         return error_response("Validation Error", 422, err.messages)
+    except CustomerNotFoundError as err:
+        return error_response(str(err), 404)
     
 @bp.route('', methods=['GET'])
 def list_orders():

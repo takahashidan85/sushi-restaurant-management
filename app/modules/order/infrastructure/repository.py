@@ -8,7 +8,7 @@ class OrderRepository:
 
     @staticmethod
     def _to_entity(model: OrderModel) -> Order:
-        return Order(model.id, model.customer_id, model.order_type, model.status)
+        return Order(model.id, model.customer_id, model.order_type, model.status, model.create_time, model.total_price)
 
     @staticmethod
     def add(customer_id: int, order_type: str) -> Order:

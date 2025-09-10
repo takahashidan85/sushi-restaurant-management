@@ -1,19 +1,27 @@
 from ..infrastructure.repository import OrderRepository
-from ..domain.exceptions import OrderNotFoundError, OrderInvalidStatusError, OrderStatusConflictError
+from ..domain.exceptions import OrderInvalidStatusError, OrderStatusConflictError
 
 class OrderService:
     """Service layer for Order operations."""
     
     STATUS_FLOW = {
-        "dine-in": ["pending", "preparing", "ready", "served", "completed", "cancelled"],
+        "dine_in": ["pending", "preparing", "ready", "served", "completed", "cancelled"],
         "take_out": ["pending", "preparing", "ready", "completed", "cancelled"],
         "delivery": ["pending", "preparing", "ready", "delivering", "completed", "cancelled"]
     }
 
     @staticmethod
     def create(customer_id: int, order_type: str):
-        if order_type not in ["dine-in", "take_out", "delivery"]:
+        from app.modules.customer.infrastructure.models import CustomerModel
+        from app.modules.customer.domain.exceptions import CustomerNotFoundError
+        if order_type not in ["dine_in", "take_out", "delivery"]:
             raise OrderInvalidStatusError(f"Invalid order type: {order_type}")
+        
+        customer = CustomerModel.query.get(customer_id)
+        """If the id doesn't exist."""
+        if not customer:
+            raise CustomerNotFoundError(f"Customer with id {customer_id} does not exist")
+        
         return OrderRepository.add(customer_id, order_type)
 
     @staticmethod
@@ -57,6 +65,14 @@ class OrderService:
             raise OrderInvalidStatusError(f"Invalid status '{new_status}' for order type '{order.order_type}'")
         
         return OrderRepository.update_status(order_id, new_status)
+    
+    @staticmethod
+    def update_total(order_id: int):
+        """Recalculate and update total price for an order"""
+        order = OrderRepository.get(order_id)
+        total = sum(d.quantity * d.sushi_item.price for d in order.order_details)
+
+        return OrderRepository.update_total(order_id, total)
     
     @staticmethod
     def delete(order_id: int):

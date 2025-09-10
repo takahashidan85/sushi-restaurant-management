@@ -4,7 +4,7 @@ class OrderCreateSchema(Schema):
     customer_id = fields.Int(required=True)
     order_type = fields.Str(
         required=True, 
-        validate=validate.OneOf(["dine-in", "take_out", "delivery"])
+        validate=validate.OneOf(["dine_in", "take_out", "delivery"])
     )
 
 class OrderUpdateSchema(Schema):
@@ -24,3 +24,5 @@ class OrderResponseSchema(Schema):
     customer_id = fields.Int()
     order_type = fields.Str()
     status = fields.Str()
+    create_time = fields.DateTime(dump_only=True)
+    total_price = fields.Int(dump_only=True)
