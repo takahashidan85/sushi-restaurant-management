@@ -343,12 +343,11 @@ pytest -v
 ### Notes
 
 The project includes a seed.py script to populate the database with initial data (customers, sushi items, orders).
-
-Running this before tests ensures that customer_id=1 and sushi_item_id=1 exist for order-related tests:
+- Running this before tests ensures that customer_id=1 and sushi_item_id=1 exist for order-related tests:
 ```bash
 python seed.py
 ```
-Warnings may appear due to deprecated APIs in Flask/SQLAlchemy, but they do not affect test correctness.
+- Warnings may appear due to deprecated APIs in Flask/SQLAlchemy, but they do not affect test correctness.
 
 
 ---
