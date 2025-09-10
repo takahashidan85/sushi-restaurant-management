@@ -2,6 +2,8 @@
 actor User
 actor Admin
 
+left to right direction
+
 package "Customer Management" {
   User --> (Create Customer)
   User --> (View Customer)

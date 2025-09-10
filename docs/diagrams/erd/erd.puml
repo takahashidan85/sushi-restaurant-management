@@ -8,8 +8,10 @@ entity "Customer" as customers {
 entity "Order" as orders {
   *id : int
   customer_id : int
-  order_type : varchar(50) = "dine-in"
+  order_type : varchar(50) = "dine_in"
   status : varchar(50) = "pending"
+  create_time: datetime
+  total_price: int = 0
 }
 
 entity "OrderDetail" as order_details {
@@ -17,7 +19,7 @@ entity "OrderDetail" as order_details {
   order_id : int
   sushi_item_id : int
   quantity : int = 1
-  total_price : float = 0.0
+  unit_price : int = 0
 }
 
 entity "SushiItem" as sushi_items {
