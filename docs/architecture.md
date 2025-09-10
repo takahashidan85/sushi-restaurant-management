@@ -76,7 +76,7 @@ See the [ERD](diagrams/erd/erd.png).
 ### Main Entities
 - **Customer**: id, name, email (unique).  
 - **SushiItem**: id, name, price, description, category.  
-- **Order**: id, customer_id (FK), status, order_type, create_time.  
+- **Order**: id, customer_id (FK), status, order_type, create_time, total_price.  
 - **OrderDetail**: id, order_id (FK), sushi_item_id (FK), quantity, unit_price.  
 
 ### Relationships
