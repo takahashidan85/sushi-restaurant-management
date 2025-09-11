@@ -10,16 +10,20 @@ def configure_logging(app):
     log_level = logging.DEBUG if app.debug else logging.INFO
     app.logger.setLevel(log_level)
 
+    log_dir = os.path.join(os.getcwd(), "logs")
+    os.makedirs(log_dir, exist_ok=True)
+
     """File Handler (Actions)"""
-    action_file_handler = RotatingFileHandler('logs/actions.log', maxBytes=10240, backupCount=10)
+    action_file_handler = RotatingFileHandler(
+        os.path.join(log_dir, "actions.log"), maxBytes=10240, backupCount=10
+    )
     action_file_handler.setLevel(log_level)
 
     """File Handler (Error)"""
-    error_file_handler = RotatingFileHandler('logs/errors.log', maxBytes=10240, backupCount=10)
+    error_file_handler = RotatingFileHandler(
+        os.path.join(log_dir, "errors.log"), maxBytes=10240, backupCount=10
+    )
     error_file_handler.setLevel(logging.ERROR)
-
-    if not os.path.exists('logs'):
-        os.makedirs('logs')
 
     formatter = logging.Formatter(
         "[%(asctime)s] - %(name)s - %(levelname)s - %(message)s"
@@ -34,6 +38,7 @@ def configure_logging(app):
     app.logger.addHandler(error_file_handler)
 
     app.logger.info("Logging is set up.")
+
 
 def setup_request_logging(app):
     """Request and response log for APIs."""
