@@ -242,7 +242,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Order created",
             "content": {
               "application/json": {
@@ -265,7 +265,7 @@
         "summary": "List all orders",
         "tags": ["Order"],
         "responses": {
-          "201": {"description": "List of orders"}
+          "200": {"description": "List of orders"}
         }
       }
     },
