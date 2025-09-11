@@ -172,6 +172,7 @@ Copy the example file:
 
 ```bash
 cp .env.example .env
+set DATABASE_URL=postgresql://postgres:postgres@localhost:5432/sushi_db #local run
 ```
 Then edit .env if needed (database, secret key, etc.).
 
