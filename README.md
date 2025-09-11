@@ -288,10 +288,10 @@ Content-Type: application/json
 ```json
 {
   "id": 1,
-  "name": "Salmon Nigiri",
-  "price": 50000,
-  "category": "nigiri",
-  "description": "Fresh salmon over rice"
+  "order_id": 1,
+  "quantity": 2,
+  "sushi_item_id": 5,
+  "unit_price": 60000
 }
 ```
 **Create a new order**
@@ -305,10 +305,14 @@ Content-Type: application/json
 }
 ```
 *Response (201 Created)*
-```
+```json
 {
-  "order_id": 6,
-  "status": "created"
+  "create_time": "2025-09-03T10:00:00+07:00",
+  "customer_id": 2,
+  "id": 1,
+  "order_type": "dine_in",
+  "status": "pending",
+  "total_price": 0
 }
 ```
 **Add order details**
