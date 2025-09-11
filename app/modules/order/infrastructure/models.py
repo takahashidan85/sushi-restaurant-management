@@ -1,6 +1,5 @@
 from app.core.extensions import db
 from datetime import datetime
-import pytz
 
 class OrderModel(db.Model):
     """ORM model for the orders table."""
