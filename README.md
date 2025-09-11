@@ -356,6 +356,10 @@ Run all tests:
 ```bash
 pytest -v
 ```
+Docker:
+```bash
+docker compose run --rm web pytest
+```
 ### Notes
 
 The project includes a seed.py script to populate the database with initial data (customers, sushi items, orders).
